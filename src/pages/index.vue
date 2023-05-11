@@ -1,5 +1,5 @@
 <template>
-  <div class="RecordAddress">new address</div>
+  <div class="RecordAddress">آدرس جدید</div>
 </template>
 
 <script setup lang="ts">

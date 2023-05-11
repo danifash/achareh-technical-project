@@ -1,0 +1,26 @@
+@import "./font.scss";
+
+:root {
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+  --color-back: #e5e5e5;
+  --color-primary: #00bfa5;
+  --color-secondary: #e61236;
+  --color-text: #37474f;
+  --color-border: #d4d4d4;
+  --color-gray: #9b9b9b;
+}
+
+* {
+  font-family: "VazirBold", sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  direction: rtl;
+}
+
+body {
+  color: var(--color-text);
+  background-color: var(--color-back);
+}

@@ -10,6 +10,8 @@
           type="text"
           input-name="first_name"
           class="first-filed"
+          :error-message="addressData.first_name.error"
+          @on-value-change="changeFirstName"
         />
         <TextInput
           title="نام خانوادگی"
@@ -17,6 +19,8 @@
           type="text"
           input-name="last_name"
           class="first-filed"
+          :error-message="addressData.last_name.error"
+          @on-value-change="changeLastName"
         />
         <TextInput
           title="شماره تلفن همراه"
@@ -24,33 +28,47 @@
           type="number"
           input-name="phone_number"
           class="first-filed"
+          :error-message="addressData.coordinate_mobile.error"
+          @on-value-change="changePhoneNumber"
         />
       </div>
       <div class="input-card__name_fileds address">
         <TextInput
           title="شماره تلفن ثبات (اختیاری)"
           placeholder="مثال: 0211234567"
-          type="text"
+          type="number"
           input-name="phone"
           class="first-filed"
+          :error-message="addressData.coordinate_phone_number.error"
+          @on-value-change="changePhone"
         />
         <TextInput
           title="آدرس"
           type="text"
           input-name="address"
           class="second-filed"
+          :error-message="addressData.address.error"
+          @on-value-change="changeAddress"
         />
       </div>
       <div class="input-card__radio-group">
         <h3>جنسیت</h3>
         <div class="radio-group">
           <label>
-            <input type="radio" name="gender" value="male" />
+            <input
+              type="radio"
+              v-model="addressData.gender.value"
+              value="female"
+            />
             خانم
           </label>
 
           <label>
-            <input type="radio" name="gender" value="female" />
+            <input
+              type="radio"
+              v-model="addressData.gender.value"
+              value="male"
+            />
             آقا
           </label>
         </div>
@@ -60,11 +78,20 @@
 </template>
 
 <script setup lang="ts">
+import type { PropType } from "vue";
+
+import { IAddressFields } from "../../constants/types";
 import TextInput from "../Base/TextInput.vue";
 
 // plugins and composable variables -------------------------------
 
 // props ----------------------------------------------------------
+const props = defineProps({
+  addressData: {
+    type: Object as PropType<IAddressFields>,
+    required: true,
+  },
+});
 
 // data variables -------------------------------------------------
 
@@ -75,6 +102,56 @@ import TextInput from "../Base/TextInput.vue";
 // computed methods -----------------------------------------------
 
 // internal events ------------------------------------------------
+const changeFirstName = (name: string) => {
+  props.addressData.first_name.value = name;
+  if (name === "") {
+    props.addressData.first_name.error = "پر کردن این فیلد الزامی است";
+  } else if (name.length < 3) {
+    props.addressData.first_name.error = "نام باید دارای 3 کاراکتر باشد";
+  } else {
+    props.addressData.first_name.error = "";
+  }
+};
+
+const changeLastName = (name: string) => {
+  props.addressData.first_name.value = name;
+  if (name === "") {
+    props.addressData.last_name.error = "پر کردن این فیلد الزامی است";
+  } else if (name.length < 3) {
+    props.addressData.last_name.error =
+      "نام خانوادگی باید دارای 3 کاراکتر باشد";
+  } else {
+    props.addressData.last_name.error = "";
+  }
+};
+const changePhoneNumber = (phone: string) => {
+  props.addressData.coordinate_mobile.value = phone;
+  if (phone === "") {
+    props.addressData.coordinate_mobile.error = "پر کردن این فیلد الزامی است";
+  } else if (!/^(\+98?)?{?(0?9[0-9]{9,9}}?)$/.test(phone)) {
+    props.addressData.coordinate_mobile.error = "فرمت نامناسب";
+  } else {
+    props.addressData.coordinate_mobile.error = "";
+  }
+};
+const changePhone = (phone: string) => {
+  props.addressData.coordinate_phone_number.value = phone;
+  if (!/^(\+98|0)?\d{10}$/.test(phone)) {
+    props.addressData.coordinate_phone_number.error = "فرمت نامناسب";
+  } else {
+    props.addressData.coordinate_phone_number.error = "";
+  }
+};
+const changeAddress = (address: string) => {
+  props.addressData.address.value = address;
+  if (address === "") {
+    props.addressData.address.error = "پر کردن این فیلد الزامی است";
+  } else if (address.length < 10) {
+    props.addressData.address.error = "آدرس باید دارای 10 کاراکتر باشد";
+  } else {
+    props.addressData.address.error = "";
+  }
+};
 
 // watchers -------------------------------------------------------
 </script>

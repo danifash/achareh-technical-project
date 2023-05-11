@@ -1,6 +1,6 @@
 <template>
   <div class="RecordAddress">
-    <InputSection />
+    <InputSection :address-data="addressData" />
     <div class="footer">
       <button class="continue-btn">ثبت و ادامه</button>
     </div>
@@ -8,15 +8,26 @@
 </template>
 
 <script setup lang="ts">
-// import { ref } from "vue";
+import type { Ref } from "vue";
+import { ref } from "vue";
 
+import { IAddressFields } from "../constants/types";
 import InputSection from "../components/RecordAddress/InputSection.vue";
 // plugins and composable variables -------------------------------
 
 // props ----------------------------------------------------------
 
 // data variables -------------------------------------------------
-// const addressData = ref({ name: "" });
+const addressData: Ref<IAddressFields> = ref({
+  address: { value: "", error: "" },
+  last_name: { value: "", error: "" },
+  first_name: { value: "", error: "" },
+  gender: { value: "male", error: "" },
+  lat: { value: 0, error: "" },
+  lng: { value: 0, error: "" },
+  coordinate_mobile: { value: "", error: "" },
+  coordinate_phone_number: { value: "", error: "" },
+});
 
 // emits events ---------------------------------------------------
 

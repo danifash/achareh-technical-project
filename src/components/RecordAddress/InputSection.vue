@@ -25,7 +25,7 @@
         <TextInput
           title="شماره تلفن همراه"
           placeholder="مثال: 091212345678"
-          type="number"
+          type="text"
           input-name="phone_number"
           class="first-filed"
           :error-message="addressData.coordinate_mobile.error"
@@ -36,7 +36,7 @@
         <TextInput
           title="شماره تلفن ثبات (اختیاری)"
           placeholder="مثال: 0211234567"
-          type="number"
+          type="text"
           input-name="phone"
           class="first-filed"
           :error-message="addressData.coordinate_phone_number.error"
@@ -114,7 +114,7 @@ const changeFirstName = (name: string) => {
 };
 
 const changeLastName = (name: string) => {
-  props.addressData.first_name.value = name;
+  props.addressData.last_name.value = name;
   if (name === "") {
     props.addressData.last_name.error = "پر کردن این فیلد الزامی است";
   } else if (name.length < 3) {

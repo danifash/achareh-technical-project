@@ -1,8 +1,9 @@
 <template>
   <div class="RecordAddress">
     <InputSection v-if="section === 1" :address-data="addressData" />
-    <MapSection v-if="section === 2" :address-data="addressData" />
-    <div class="footer">
+    <MapSection v-else-if="section === 2" :address-data="addressData" />
+    <DoneSection v-else />
+    <div v-if="section < 3" class="footer">
       <button @click="countinue" class="continue-btn">
         <img
           v-if="loading"
@@ -21,15 +22,17 @@
 import type { Ref } from "vue";
 import { ref } from "vue";
 
+import { createAddress } from "../api/address";
 import { IAddressFields } from "../constants/types";
 import InputSection from "../components/RecordAddress/InputSection.vue";
 import MapSection from "../components/RecordAddress/MapSection.vue";
+import DoneSection from "../components/RecordAddress/DoneSection.vue";
 // plugins and composable variables -------------------------------
 
 // props ----------------------------------------------------------
 
 // data variables -------------------------------------------------
-const loading: Ref<boolean> = ref(true);
+const loading: Ref<boolean> = ref(false);
 const section: Ref<number> = ref(1);
 const addressData: Ref<IAddressFields> = ref({
   address: { value: "", error: "" },
@@ -51,7 +54,8 @@ const addressData: Ref<IAddressFields> = ref({
 // internal events ------------------------------------------------
 const countinue = () => {
   if (!checkErrors()) return;
-  section.value = section.value + 1;
+  if (section.value === 1) section.value = section.value + 1;
+  else createApiAddress();
 };
 
 const checkErrors = () => {
@@ -62,6 +66,31 @@ const checkErrors = () => {
     addressData.value.coordinate_phone_number.error === "" &&
     addressData.value.coordinate_mobile.error === ""
   );
+};
+
+const createApiAddress = async () => {
+  loading.value = true;
+  await createAddress({
+    first_name: addressData.value.first_name.value,
+    last_name: addressData.value.last_name.value,
+    coordinate_mobile: addressData.value.coordinate_mobile.value,
+    coordinate_phone_number: addressData.value.coordinate_phone_number.value,
+    address: addressData.value.address.value,
+    lat: addressData.value.lat.value,
+    lng: addressData.value.lng.value,
+    gender: addressData.value.gender.value,
+    region: "1",
+  })
+    .then((res) => {
+      console.log(res);
+      section.value = section.value + 1;
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
 // watchers -------------------------------------------------------

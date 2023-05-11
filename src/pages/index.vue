@@ -1,9 +1,18 @@
 <template>
   <div class="RecordAddress">
     <InputSection v-if="section === 1" :address-data="addressData" />
-    <MapSection v-if="section === 2" />
+    <MapSection v-if="section === 2" :address-data="addressData" />
     <div class="footer">
-      <button @click="countinue" class="continue-btn">ثبت و ادامه</button>
+      <button @click="countinue" class="continue-btn">
+        <img
+          v-if="loading"
+          src="../assets/icons/loading.svg"
+          height="25"
+          width="200"
+          alt=""
+        />
+        <h2 v-else>ثبت و ادامه</h2>
+      </button>
     </div>
   </div>
 </template>
@@ -20,6 +29,7 @@ import MapSection from "../components/RecordAddress/MapSection.vue";
 // props ----------------------------------------------------------
 
 // data variables -------------------------------------------------
+const loading: Ref<boolean> = ref(true);
 const section: Ref<number> = ref(1);
 const addressData: Ref<IAddressFields> = ref({
   address: { value: "", error: "" },
@@ -40,7 +50,18 @@ const addressData: Ref<IAddressFields> = ref({
 
 // internal events ------------------------------------------------
 const countinue = () => {
+  if (!checkErrors()) return;
   section.value = section.value + 1;
+};
+
+const checkErrors = () => {
+  return (
+    addressData.value.address.error === "" &&
+    addressData.value.first_name.error === "" &&
+    addressData.value.last_name.error === "" &&
+    addressData.value.coordinate_phone_number.error === "" &&
+    addressData.value.coordinate_mobile.error === ""
+  );
 };
 
 // watchers -------------------------------------------------------

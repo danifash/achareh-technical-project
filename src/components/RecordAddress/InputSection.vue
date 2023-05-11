@@ -82,6 +82,7 @@ import TextInput from "../Base/TextInput.vue";
 <style scoped lang="scss">
 .RecordAddressInputSection {
   padding: 18px 5%;
+  padding-bottom: 100px;
   & > h2 {
     margin-bottom: 8px;
   }

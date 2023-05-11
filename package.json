@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@types/node": "^20.1.2",
+    "@vue-leaflet/vue-leaflet": "^0.9.0",
+    "leaflet": "^1.9.3",
     "sass": "^1.62.1",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"

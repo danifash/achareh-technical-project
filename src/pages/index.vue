@@ -1,8 +1,9 @@
 <template>
   <div class="RecordAddress">
-    <InputSection :address-data="addressData" />
+    <InputSection v-if="section === 1" :address-data="addressData" />
+    <MapSection v-if="section === 2" />
     <div class="footer">
-      <button class="continue-btn">ثبت و ادامه</button>
+      <button @click="countinue" class="continue-btn">ثبت و ادامه</button>
     </div>
   </div>
 </template>
@@ -13,11 +14,13 @@ import { ref } from "vue";
 
 import { IAddressFields } from "../constants/types";
 import InputSection from "../components/RecordAddress/InputSection.vue";
+import MapSection from "../components/RecordAddress/MapSection.vue";
 // plugins and composable variables -------------------------------
 
 // props ----------------------------------------------------------
 
 // data variables -------------------------------------------------
+const section: Ref<number> = ref(1);
 const addressData: Ref<IAddressFields> = ref({
   address: { value: "", error: "" },
   last_name: { value: "", error: "" },
@@ -36,6 +39,9 @@ const addressData: Ref<IAddressFields> = ref({
 // computed methods -----------------------------------------------
 
 // internal events ------------------------------------------------
+const countinue = () => {
+  section.value = section.value + 1;
+};
 
 // watchers -------------------------------------------------------
 </script>

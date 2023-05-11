@@ -1,18 +1,30 @@
 import { createRouter, createWebHistory } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
+import Layout from "../layouts/DefaultLayout.vue";
 import AddressesPage from "../pages/addresses.vue";
 import RecordAddressesPage from "../pages/index.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/addresses",
+    path: "/",
     name: "addresses",
-    component: AddressesPage,
+    children: [
+      {
+        path: "",
+        name: "addresses",
+        component: AddressesPage,
+      },
+      {
+        path: "record-address",
+        name: "recordAddress",
+        component: RecordAddressesPage,
+      },
+    ],
+    component: Layout,
   },
   {
-    path: "",
-    name: "recordAddress",
-    component: RecordAddressesPage,
+    path: "/:pathMatch(.*)*",
+    redirect: "/",
   },
 ];
 

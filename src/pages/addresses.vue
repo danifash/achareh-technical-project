@@ -6,30 +6,59 @@
     </div>
     <template v-else>
       <template v-if="isDesktopMode">
-        <div class="input-card" v-for="item in addressData" :key="item.id">
-          <div class="input-card__item">
+        <div
+          class="card card__desktop"
+          v-for="item in addressData"
+          :key="item.id"
+        >
+          <div class="card__item">
             <h3>نام</h3>
             <h2>{{ item.first_name }}</h2>
           </div>
-          <div class="input-card__item">
+          <div class="card__item">
             <h3>نام خانوادگی</h3>
             <h2>{{ item.last_name }}</h2>
           </div>
-          <div class="input-card__item">
+          <div class="card__item">
             <h3>شماره تلفن همراه</h3>
             <h2>{{ item.coordinate_mobile }}</h2>
           </div>
-          <div class="input-card__item">
+          <div class="card__item">
             <h3>شماره تلفن ثابت</h3>
             <h2>{{ item.coordinate_phone_number }}</h2>
           </div>
-          <div class="input-card__item">
+          <div class="card__item">
             <h3>جنسیت</h3>
             <h2>{{ item.gender === "male" ? "آقا" : "خانم" }}</h2>
           </div>
-          <div class="input-card__item">
+          <div class="card__item">
             <h3>آدرس</h3>
             <h2>{{ item.address }}</h2>
+          </div>
+        </div>
+      </template>
+      <template v-else>
+        <div class="card" v-for="item in addressData" :key="item.id">
+          <div class="card__item_mobile">
+            <h3 class="gray">نام و نام خانوادگی</h3>
+            <h3>{{ `${item.first_name} ${item.last_name}` }}</h3>
+          </div>
+          <div class="card__item_mobile">
+            <h3 class="gray">جنسیت</h3>
+            <h3>{{ item.gender === "male" ? "آقا" : "خانم" }}</h3>
+          </div>
+          <div class="card__item_mobile">
+            <h3 class="gray">شماره تلفن همراه</h3>
+            <h3>{{ item.coordinate_mobile }}</h3>
+          </div>
+          <div class="card__item_mobile">
+            <h3 class="gray">شماره تلفن ثابت</h3>
+            <h3>{{ item.coordinate_phone_number }}</h3>
+          </div>
+          <hr class="devider" />
+          <div>
+            <h3 class="gray" :style="{ marginBottom: '10px' }">آدرس</h3>
+            <h3>{{ item.address }}</h3>
           </div>
         </div>
       </template>
@@ -39,7 +68,7 @@
 
 <script setup lang="ts">
 import type { Ref } from "vue";
-import { onMounted, ref } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
 
 import { getAddresses } from "../api/address";
 import { IAddressData } from "../constants/types";
@@ -50,16 +79,19 @@ import { IAddressData } from "../constants/types";
 // data variables -------------------------------------------------
 const addressData: Ref<IAddressData[]> = ref([]);
 const loading: Ref<boolean> = ref(false);
-const isDesktopMode: Ref<boolean> = ref(false);
+const isDesktopMode: Ref<boolean> = ref(true);
 
 // emits events ---------------------------------------------------
 
 // lifecycle hooks ------------------------------------------------
-onMounted(async () => {
+onBeforeMount(() => {
   window.addEventListener("resize", () => {
     if (window.innerWidth > 900) isDesktopMode.value = true;
     else isDesktopMode.value = false;
   });
+});
+
+onMounted(async () => {
   await getApiAddresses();
 });
 
@@ -103,14 +135,12 @@ const getApiAddresses = async () => {
     width: 100px;
     margin: auto;
   }
-  .input-card {
+  .card {
     background: var(--color-white);
     padding: 16px;
     border: 1px solid #edf0f2;
     box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.08);
     border-radius: 4px;
-    display: grid;
-    grid-template-columns: 25% 25% 50%;
     margin-bottom: 20px;
     & > h2 {
       margin-bottom: 16px;
@@ -123,14 +153,32 @@ const getApiAddresses = async () => {
         margin-top: 14px;
         margin-bottom: 35px;
       }
+      &_mobile {
+        margin-bottom: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
     }
+    .gray {
+      color: var(--color-gray);
+    }
+    .devider {
+      margin: 12px 0px;
+      color: var(--color-border);
+    }
+  }
+
+  .card__desktop {
+    display: grid;
+    grid-template-columns: 25% 25% 50%;
   }
 }
 
 @media screen and (min-width: 900px) {
   .AddressesPage {
     padding: 32px 15%;
-    .input-card {
+    .card {
       padding: 32px 40px;
     }
   }

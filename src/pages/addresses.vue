@@ -79,12 +79,14 @@ import { IAddressData } from "../constants/types";
 // data variables -------------------------------------------------
 const addressData: Ref<IAddressData[]> = ref([]);
 const loading: Ref<boolean> = ref(false);
-const isDesktopMode: Ref<boolean> = ref(true);
+const isDesktopMode: Ref<boolean> = ref(false);
 
 // emits events ---------------------------------------------------
 
 // lifecycle hooks ------------------------------------------------
 onBeforeMount(() => {
+  if (window.innerWidth > 900) isDesktopMode.value = true;
+  else isDesktopMode.value = false;
   window.addEventListener("resize", () => {
     if (window.innerWidth > 900) isDesktopMode.value = true;
     else isDesktopMode.value = false;
